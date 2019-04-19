@@ -1,9 +1,11 @@
 # BorgPI: Salt PI backup server
 
-## Variables
-All variables should be defined in `vars.yaml`
+# Variables
+---
 
-### SSH
+## Pillar
+
+### pillar/ssh.sls
 ```yaml
 # authorized_keys is a hash that has usernames as keys that map to a list
 # of public ssh keys that should appear in the users authorized_keys file
@@ -12,7 +14,7 @@ authorized_keys:
     - "public ssh key"
 ```
 
-### Borg
+### pillar/borg.sls
 ```yaml
 # backup_clients are the hosts that will be allowed to backup to the PI backup
 # server. backup_clients is a hash that maps hostnames to sshkeys. The ssh keys
