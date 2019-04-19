@@ -1,4 +1,3 @@
-{% import_yaml "vars.yaml" as vars %}
 Install borg backup from pip:
   pkg.installed:
     - pkgs:
@@ -29,15 +28,15 @@ Setup backup user:
 Create backup users homedir mount:
   mount.mounted:
     - name: /home/backup
-    - device: {{ vars.backup_mount.device }}
-    - fstype: {{ vars.backup_mount.fs }}
-    - opts: {{ vars.backup_mount.opts }}
+    - device: {{ pillar['backup_mount']['device'] }}
+    - fstype: {{ pillar['backup_mount']['fs'] }}
+    - opts: {{ pillar['backup_mount']['opts'] }}
     - persist: True
     - mount: True
     - require:
       - user: backup
 
-{% for host, key in vars.backup_clients.items() %}
+{% for host, key in pillar['backup_clients'].items() %}
 Give backup access to {{host}}:
   ssh_auth.present:
     - user: backup
@@ -46,7 +45,7 @@ Give backup access to {{host}}:
       - command="cd /home/backup/repos/{{host}}; borg serve --restrict-to-path /home/backup/repos/{{host}}"
       - restrict
 
-Create Repo dir for Host:
+Create Repo dir for {{ host }}:
   file.directory:
     - name: /home/backup/repos/{{host}}
     - user: backup
